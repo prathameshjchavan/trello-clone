@@ -3,12 +3,15 @@
 import { useBoardStore } from "@/store/boardStore";
 import { useModalStore } from "@/store/modalStore";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, useRef } from "react";
 import TaskTypeRadioGroup from "./TaskTypeRadioGroup";
+import Image from "next/image";
+import { PhotoIcon } from "@heroicons/react/24/solid";
 
 const Modal = () => {
 	const { isOpen, closeModal } = useModalStore();
-	const { newTaskInput, setNewTaskInput } = useBoardStore();
+	const { newTaskInput, setNewTaskInput, image, setImage } = useBoardStore();
+	const imagePickerRef = useRef<HTMLInputElement>(null);
 
 	return (
 		// Use the `Transition` component at the root level
@@ -55,6 +58,39 @@ const Modal = () => {
 								</div>
 
 								<TaskTypeRadioGroup />
+
+								<div>
+									<button
+										onClick={(e) => {
+											e.preventDefault();
+											imagePickerRef.current?.click();
+										}}
+										className="w-full border border-gray-300 rounded-md outline-none p-5 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+									>
+										<PhotoIcon className="h-6 w-6 mr-2 inline-block" />
+										Upload Image
+									</button>
+									{image && (
+										<Image
+											src={URL.createObjectURL(image)}
+											alt="Uploaded Image"
+											width={200}
+											height={200}
+											onClick={() => setImage(null)}
+											className="w-full h-44 object-cover mt-2 filter hover:grayscale transition-all duration-150 cursor-not-allowed"
+										/>
+									)}
+									<input
+										type="file"
+										ref={imagePickerRef}
+										hidden
+										onChange={(e) => {
+											// check e is an image
+											if (!e.target.files![0].type.startsWith("image/")) return;
+											setImage(e.target.files![0]);
+										}}
+									/>
+								</div>
 							</Dialog.Panel>
 						</Transition.Child>
 					</div>
