@@ -65,6 +65,7 @@ const TodoCard = ({
 				<div className="h-full w-full rounded-b-md">
 					<Image
 						src={imageUrl}
+						priority={true}
 						alt="Task image"
 						width={400}
 						height={200}

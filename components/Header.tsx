@@ -12,17 +12,17 @@ const Header = () => {
 	const [suggestion, setSuggestion] = useState("");
 	const { board, searchString, setSearchString } = useBoardStore();
 
-	// useEffect(() => {
-	// 	if (board.columns.size === 0) return;
+	useEffect(() => {
+		if (board.columns.size === 0) return;
 
-	// 	setLoading(true);
-	// 	const fetchSuggestionFunc = async () => {
-	// 		const suggestion = await fetchSuggestion(board);
-	// 		setSuggestion(suggestion);
-	// 		setLoading(false);
-	// 	};
-	// 	fetchSuggestionFunc();
-	// }, [board]);
+		setLoading(true);
+		const fetchSuggestionFunc = async () => {
+			const suggestion = await fetchSuggestion(board);
+			setSuggestion(suggestion);
+			setLoading(false);
+		};
+		fetchSuggestionFunc();
+	}, [board]);
 
 	return (
 		<header>
