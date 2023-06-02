@@ -3,20 +3,42 @@
 import { useBoardStore } from "@/store/boardStore";
 import { useModalStore } from "@/store/modalStore";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useRef } from "react";
+import { FormEvent, Fragment, useRef } from "react";
 import TaskTypeRadioGroup from "./TaskTypeRadioGroup";
 import Image from "next/image";
 import { PhotoIcon } from "@heroicons/react/24/solid";
 
 const Modal = () => {
 	const { isOpen, closeModal } = useModalStore();
-	const { newTaskInput, setNewTaskInput, image, setImage } = useBoardStore();
+	const {
+		newTaskInput,
+		setNewTaskInput,
+		image,
+		setImage,
+		addTask,
+		newTaskType,
+	} = useBoardStore();
 	const imagePickerRef = useRef<HTMLInputElement>(null);
+
+	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		if (!newTaskInput) return;
+
+		// add task
+		addTask(newTaskInput, newTaskType, image);
+		setImage(null);
+		closeModal();
+	};
 
 	return (
 		// Use the `Transition` component at the root level
 		<Transition appear show={isOpen} as={Fragment}>
-			<Dialog as="form" className="relative z-10" onClose={closeModal}>
+			<Dialog
+				as="form"
+				className="relative z-10"
+				onClose={closeModal}
+				onSubmit={handleSubmit}
+			>
 				<Transition.Child
 					as={Fragment}
 					enter="ease-out duration-300"
